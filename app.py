@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, render_template
 from flask_socketio import SocketIO, emit
 import json
 
@@ -6,9 +6,13 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with your secret key
 socketio = SocketIO(app)
 
+# Global variable to store the latest packet
+latest_packet = None
+
 @app.route('/')
 def index():
-    return "ESP8266 SocketIO Server"
+    # Render the index template with the latest packet
+    return render_template('index.html', packet=latest_packet)
 
 @socketio.on('connect')
 def handle_connect():
@@ -20,8 +24,9 @@ def handle_disconnect():
 
 @socketio.on('event_name')
 def handle_my_custom_event(json_data):
+    global latest_packet
     print('received json:', json_data)
-    # You can process the data here and even send a response back to ESP8266
+    latest_packet = json_data  # Update the latest packet
     emit('response_event', {'data': 'Response from server'})
 
 if __name__ == '__main__':

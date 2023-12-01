@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ESP8266 SocketIO Server</title>
+</head>
+<body>
+    <h1>Latest Packet Received</h1>
+    {% if packet %}
+        <pre>{{ packet | tojson | safe }}</pre>
+    {% else %}
+        <p>No packets received yet.</p>
+    {% endif %}
+</body>
+</html>
