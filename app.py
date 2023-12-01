@@ -4,7 +4,7 @@ import json
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with your secret key
-socketio = SocketIO(app)
+socketio = SocketIO(app,async_mode='gevent')
 
 # Global variable to store the latest packet
 latest_packet = None
