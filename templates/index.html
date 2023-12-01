@@ -3,13 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>ESP8266 SocketIO Server</title>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            var socket = io();
+
+            socket.on('update_packet', function(data) {
+                document.getElementById('packet').innerHTML = JSON.stringify(data, null, 2);
+            });
+        });
+    </script>
 </head>
 <body>
     <h1>Latest Packet Received</h1>
-    {% if packet %}
-        <pre>{{ packet | tojson | safe }}</pre>
-    {% else %}
-        <p>No packets received yet.</p>
-    {% endif %}
+    <pre id="packet">Waiting for data...</pre>
 </body>
 </html>
