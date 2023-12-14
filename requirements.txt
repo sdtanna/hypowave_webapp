@@ -3,3 +3,7 @@ Flask-SocketIO
 gevent
 gevent-websocket
 gunicorn
+psycopg2
+Flask-SQLAlchemy
+Flask-Migrate
+Flask-Script
