@@ -13,9 +13,81 @@
             });
         });
     </script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel = "stylesheet" type = "text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://kit.fontawesome.com/7edbb96f44.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
-    <h1>Latest Packet Received</h1>
-    <pre id="packet">Waiting for data...</pre>
+
+    <div class="header unselectable">
+        <a>Hypowave</a>
+        <button class="header_btn fa-solid fa-circle-user fa-2xl" style="color: #ACD5DB; margin-top: 15px;"></button>
+        <button class="header_btn fa-solid fa-gear fa-2xl" style="color: #ACD5DB; margin-top: 15px;"></button>
+        <button class="header_btn">Feedback</button>
+        <button class="header_btn">About</button>
+        <button id = "help_btn" class = "header_btn" onclick = "viewhelpmodal()">Help</button>
+    </div>
+    
+    <div class="dashboard">
+    
+        <div class="overview unselectable">
+            <h1>Overview</h1>
+            <p>Current Visitor Total: <span id="visitorTotal"></span></p>
+            <p>Stat 2: <span id="stat2"></span></p>
+            <p>Stat 3: <span id="stat3"></span></p>
+        
+            <div class="controls">
+                <button id="liveBtn" class="modeBtn" style="margin-top:2px;">Live</button>
+                <button id="todayBtn" class="modeBtn" >Today</button>
+                <button id="pastWeekBtn" class="modeBtn" >Past Week</button>
+                <button id="selectDateBtn" class="modeBtn" onclick = "viewdatesmodal()">Select Date(s)</button>
+    
+            </div>   
+        </div>
+    
+        <div class="occupancy_area">
+            <h1 id="plot_header">Live Occupancy</h1>
+            <div id="plot"></div>
+            <h1>Latest Packet Received</h1>
+            <pre id="packet">Waiting for data...</pre>
+        </div>
+     
+    </div>
+    
+    <div id="dates_modal" class="modal unselectable">
+        <!-- Modal content -->
+        <div class="dates_modal_content">
+            <button id = "close_dates_btn" class = "close_modal_btn">&#10005;</button>
+            <div>
+                <a>Select Dates</a>
+                <div id="datePicker">
+                    <d>Start Date:</d>
+                    <input type="date" id="startDate" class="dateselect">
+                    <br>
+                    <d>End Date:</d>
+                    <input type="date" id="endDate" class="dateselect">
+                    <br>
+                    <button id="submitDates" class="submitDates">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="help_modal" class="modal unselectable">
+        <!-- Modal content -->
+        <div class="help_modal_content">
+            <button id = "close_help_btn" class = "close_modal_btn">&#10005;</button>
+            <div>
+                <a>Help</a>
+                <p style="color: #ACD5DB;">...</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{{url_for('static', filename='script.js')}}"></script>
+
 </body>
 </html>

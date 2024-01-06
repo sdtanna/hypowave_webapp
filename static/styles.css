@@ -1,0 +1,240 @@
+
+::selection {
+    background: #69bad05b;
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: rgb(55, 55, 55);
+}
+
+a {
+    font-size: 24px;
+    color: #8cc4cd;
+}
+
+h1 {
+    margin-top: 0;
+    font-size: 24px;
+    color: rgb(55, 55, 55);
+}
+
+.header {
+    padding-left : 20px;
+    padding-top: 20px;
+    padding-right: 20px;
+    padding-bottom: 5px;
+}
+
+.header_btn {
+    float: right;
+    background: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    color: white;
+    border: none;
+    margin-left: 8px;
+    margin-top: 5px;
+    transition:all 0.3s;
+}
+
+.header_btn:hover {
+    font-style: bold;
+    cursor: pointer;
+}
+
+.header_btn:focus {
+    border:none;
+}
+
+.dashboard {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    padding: 20px;
+    height: 83%;
+}
+
+.overview, .occupancy_area {
+    background: #d6d6d6;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.controls {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    height: 125px;
+    width: 75%;
+
+    position: absolute;
+    bottom: 0;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.overview {
+    width: 25%;
+    position: relative;
+}
+
+.occupancy_area {
+    width: 75%;
+    margin-left: 20px;
+}
+
+.controls button {
+    margin-bottom: 8px;
+}
+
+.modeBtn {
+    background: none;
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgb(38, 38, 38);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 16px;
+    text-align: left;
+    border-radius: 8px;
+
+    width: 210px;
+    height: 25px;
+    display: block;
+}
+
+.modeBtn:hover {
+    font-size:18px;
+    background: #ACD5DB;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 3; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+@keyframes animatetop {
+    from {top: -300px; opacity: 0}
+    to {top: 0; opacity: 1}
+}
+
+.help_modal_content {
+    background-color: #dedede;
+    margin: 11% auto; /* Dist from the top and centered */
+    padding: 35px;
+    border: none #888;
+    width: 500px; /* Depends on screen size */
+    height: 30%;
+    border-radius: 15px;
+
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+}
+
+.close_modal_btn {
+    display: inline-flex;
+    float: right;
+
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    background-color: #ededec;
+    border:none;
+    color: rgb(55, 55, 55);
+
+    font-size: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    font-weight: bold;
+    padding-left: 9.3px;
+    line-height: 1.9;
+}
+
+.close_modal_btn:hover {
+    background-color: #e5e5e5;
+    border: none;
+    transition: all 0.4s;
+    cursor: pointer;
+}
+
+.dates_modal_content {
+    background-color: #dedede;
+    margin: 14% auto; /* Dist from the top and centered */
+    padding: 25px;
+    border: none #888;
+    width: 250px; /* Depends on screen size */
+    height: 23%;
+    border-radius: 15px;
+
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+}
+
+.dateselect {
+    margin-top: 15px;
+    border: none;
+    background: none;
+}
+
+#endDate {
+    margin-left: 5px;
+}
+
+.submitDates {
+    background: #ACD5DB;
+    width: 196px;
+    height: 20px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    margin-top: 15px;
+    transition: all 0.2s;
+}
+
+.submitDates:hover {
+    background: #98d0d8;
+    cursor: pointer;
+}
+
+/*SCROLL BAR*/
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #6fa6b8a4; 
+    border-radius: 10px;
+    margin-right:3px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #73aec88c; 
+}
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
