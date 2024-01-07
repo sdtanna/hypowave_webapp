@@ -1,6 +1,22 @@
 from flask import Flask, request, render_template
 from flask_socketio import SocketIO, emit
 import json
+import psycopg2
+import pandas as pd
+
+# Connecting to DB
+def connect_sql(username, password, host, database):
+    conn = psycopg2.connect(host=host, database=database, user=username, password=password)
+    return conn
+
+sql_host="ec2-44-206-18-218.compute-1.amazonaws.com"
+sql_username="qoxrlnvnhoqxrj"
+sql_password="3b0361f995fa7559058fdaba03058de268ee13a7cda5b27bbe17ddc4c8a4c5ff"
+sql_database="d5js1h474dsr6k"
+
+def add_user(username, password, host, database):
+    conn = psycopg2.connect(host=host, database=database, user=username, password=password)
+    curs = conn.cursor()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with your secret key
