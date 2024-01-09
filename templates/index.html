@@ -17,14 +17,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel = "stylesheet" type = "text/css" href="{{ url_for('static', filename='styles.css') }}">
+
     <script src="https://kit.fontawesome.com/7edbb96f44.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 <body>
 
+    <form id="form" action="{{ url_for('home')}}" method="post"></form>
+
     <div class="header unselectable">
         <a>Hypowave</a>
-        <button class="header_btn fa-solid fa-circle-user fa-2xl" style="color: #ACD5DB; margin-top: 15px;"></button>
+        <button form="form" value="adduser" name="action" class="header_btn fa-solid fa-circle-user fa-2xl" style="color: #ACD5DB; margin-top: 15px;"></button>
         <button class="header_btn fa-solid fa-gear fa-2xl" style="color: #ACD5DB; margin-top: 15px;"></button>
         <button class="header_btn">Feedback</button>
         <button class="header_btn">About</button>
@@ -51,6 +55,56 @@
         <div class="occupancy_area">
             <h1 id="plot_header">Live Occupancy</h1>
             <div id="plot"></div>
+
+            <canvas id="dataPlot"></canvas>
+            <script type="text/javascript">
+                var socket = io();
+                var ctx = document.getElementById('dataPlot').getContext('2d');
+                var chart = new Chart(ctx, {
+                    type: 'scatter', // or any other type you prefer
+                    data: {
+                        datasets: [{
+                            label: 'Sensor Data',
+                            data: [], // Initially empty, will be populated with data from server
+                            fill: false,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                position: 'bottom'
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                            display: false
+                            }
+                        }
+                    }
+                });
+        
+                socket.on('update_packet', function(data) {
+                    // Clear existing data
+                    chart.data.datasets[0].data = [];
+
+                    // Check if there is trackData and update the chart
+                    if (data.trackData && data.trackData.length > 0) {
+                        data.trackData.forEach(entry => {
+                            chart.data.datasets[0].data.push({
+                                x: entry[1], // Assuming this is the X coordinate
+                                y: entry[2]  // Assuming this is the Y coordinate
+                            });
+                        });
+                    }
+
+                    // Update the chart to reflect changes
+                    chart.update();
+                });
+            </script>
+
             <h1>Latest Packet Received</h1>
             <pre id="packet">Waiting for data...</pre>
         </div>
