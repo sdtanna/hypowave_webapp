@@ -25,14 +25,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Adjusting headers on RHS
     document.getElementById("liveBtn").addEventListener('click', () => {
         document.getElementById("plot_header").textContent = "Live Occupancy"
+        document.getElementById("dataPlot").style.display = "block"
     });
   
     document.getElementById("todayBtn").addEventListener('click', () => {
         document.getElementById("plot_header").textContent = "Today's Occupancy"
+        document.getElementById("dataPlot").style.display = "none"
     });
   
     document.getElementById("pastWeekBtn").addEventListener('click', () => {
         document.getElementById("plot_header").textContent = "Past Week's Occupancy"
+        document.getElementById("dataPlot").style.display = "none"
     });
   
     document.getElementById("submitDates").addEventListener('click', () => {
@@ -40,7 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const endDate = document.getElementById('endDate').value;
           
         if (startDate && endDate) {
-            document.getElementById("plot_header").textContent = `Occupancy from ${startDate} to ${endDate}` 
+            document.getElementById("plot_header").textContent = `Occupancy from ${startDate} to ${endDate}`
+            document.getElementById("dataPlot").style.display = "none" 
         }
     });
   

@@ -132,7 +132,7 @@ h1 {
 
 .help_modal_content {
     background-color: #dedede;
-    margin: 11% auto; /* Dist from the top and centered */
+    margin: 14% auto; /* Dist from the top and centered */
     padding: 35px;
     border: none #888;
     width: 500px; /* Depends on screen size */
@@ -171,11 +171,11 @@ h1 {
 
 .dates_modal_content {
     background-color: #dedede;
-    margin: 14% auto; /* Dist from the top and centered */
+    margin: 16% auto; /* Dist from the top and centered */
     padding: 25px;
     border: none #888;
     width: 250px; /* Depends on screen size */
-    height: 23%;
+    height: 130px;
     border-radius: 15px;
 
     animation-name: animatetop;
