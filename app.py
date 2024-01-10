@@ -43,6 +43,13 @@ sql_database="d5js1h474dsr6k"
 
 #conn.commit()
 
+# CLEARS ENTIRE DB
+# conn = psycopg2.connect(host=sql_host, database=sql_database, user=sql_username, password=sql_password)
+# curs = conn.cursor()
+# curs.execute("""DELETE FROM user_data""")
+# curs.execute("""DELETE FROM historical""")
+# conn.commit()
+# conn.close()
 
 # Function adds user when user icon clicked - to be changed
 def add_user(username, password, host, database, data):
@@ -73,9 +80,10 @@ def save_trackdata(username, password, host, database, data, date, sensor, room,
 
     try:
         for i in data:
-            xpos = i[0]
-            ypos = i[1]
-            curs.execute("""INSERT INTO historical(x_pos, y_pos, date, s_id, r_id, time) VALUES (%s, %s, %s, %s, %s, %s);""", (xpos, ypos, date, sensor, room, time))
+            trackid = i[0]
+            xpos = i[1]
+            ypos = i[2]
+            curs.execute("""INSERT INTO historical(trackid, x_pos, y_pos, date, s_id, r_id, time) VALUES (%d, %f, %f, %s, %d, %d, %s);""", (trackid, xpos, ypos, date, sensor, room, time))
         conn.commit()  # Commit the transaction
     except Exception as e:
         print("That did not work")
@@ -124,7 +132,7 @@ def handle_my_custom_event(json_data):
     emit('update_packet', latest_packet, broadcast=True)
 
     if 'trackData' in json_data:
-        data_to_add = [(entry[1], entry[2]) for entry in json_data['trackData']]
+        data_to_add = [(entry[0], entry[1], entry[2]) for entry in json_data['trackData']]
         now = datetime.datetime.now(pytz.timezone('US/Eastern'))
         formatted_date = now.strftime('%Y-%m-%d')
         formatted_time = now.strftime('%H:%M:%S')
