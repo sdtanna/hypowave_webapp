@@ -90,14 +90,13 @@
                     // Clear existing data
                     chart.data.datasets[0].data = [];
 
-                    chart.data.datasets[0].data.push({ x: 0, y: 0 });
-
                     // Check if there is trackData and update the chart
                     if (data.pointCloud && data.pointCloud.length > 0) {
+                        chart.data.datasets[0].data.push({ x: 0, y: 0 });
                         data.pointCloud.forEach(entry => {
                             chart.data.datasets[0].data.push({
-                                x: entry[1], // Assuming this is the X coordinate
-                                y: entry[2]  // Assuming this is the Y coordinate
+                                x: entry[0], // Assuming this is the X coordinate
+                                y: entry[1]  // Assuming this is the Y coordinate
                             });
                         });
                     }
