@@ -74,9 +74,14 @@ def save_trackdata(username, password, host, database, data, date, sensor, room,
         for i in data:
             xpos = i[0]
             ypos = i[1]
-            curs.execute("""INSERT INTO historical(x_pos, y_pos, date, s_id, r_id, time) VALUES (%f, %f, %s, %d, %d, %s);""", (xpos, ypos, date, sensor, room, time))
-    except:
+            curs.execute("""INSERT INTO historical(x_pos, y_pos, date, s_id, r_id, time) VALUES (%s, %s, %s, %s, %s, %s);""", (xpos, ypos, date, sensor, room, time))
+        conn.commit()  # Commit the transaction
+    except Exception as e:
         print("That did not work")
+        print(e)  # Print the exception
+    finally:
+        curs.close()  # Close the cursor
+        conn.close()  # Close the connection
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with your secret key
