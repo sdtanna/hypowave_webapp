@@ -3,6 +3,7 @@ from flask_socketio import SocketIO, emit
 import json
 import psycopg2
 import pandas as pd
+import pytz
 
 import datetime #ADD THIS TO REQS.TXT
 
@@ -124,7 +125,7 @@ def handle_my_custom_event(json_data):
 
     if 'trackData' in json_data:
         data_to_add = [(entry[1], entry[2]) for entry in json_data['trackData']]
-        now = datetime.datetime.now()
+        now = datetime.datetime.now(pytz.timezone('US/Eastern'))
         formatted_date = now.strftime('%Y-%m-%d')
         formatted_time = now.strftime('%H:%M:%S')
 
