@@ -90,6 +90,8 @@
                     // Clear existing data
                     chart.data.datasets[0].data = [];
 
+                    chart.data.datasets[0].data.push({ x: 0, y: 0 });
+
                     // Check if there is trackData and update the chart
                     if (data.pointCloud && data.pointCloud.length > 0) {
                         data.pointCloud.forEach(entry => {
