@@ -83,7 +83,7 @@ def save_trackdata(username, password, host, database, data, date, sensor, room,
             trackid = i[0]
             xpos = i[1]
             ypos = i[2]
-            curs.execute("""INSERT INTO historical(track_id, x_pos, y_pos, date, s_id, r_id, time) VALUES (%d, %f, %f, %s, %d, %d, %s);""", (trackid, xpos, ypos, date, sensor, room, time))
+            curs.execute("""INSERT INTO historical(track_id, x_pos, y_pos, date, s_id, r_id, time) VALUES (%s, %s, %s, %s, %s, %s, %s);""", (trackid, xpos, ypos, date, sensor, room, time))
         conn.commit()  # Commit the transaction
     except Exception as e:
         print("That did not work")
