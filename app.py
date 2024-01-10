@@ -123,7 +123,7 @@ def handle_my_custom_event(json_data):
         formatted_date = now.strftime('%Y-%m-%d')
         formatted_time = now.strftime('%H:%M:%S')
 
-        save_trackdata(sql_username, sql_password, sql_host, sql_database, data_to_add, formatted_date, 1, 1, formatted_time)
+        #save_trackdata(sql_username, sql_password, sql_host, sql_database, data_to_add, formatted_date, 1, 1, formatted_time)
 
         
 
