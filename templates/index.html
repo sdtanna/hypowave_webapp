@@ -73,9 +73,17 @@
                     },
                     options: {
                         scales: {
-                            x: {
-                                type: 'linear',
-                                position: 'bottom'
+                            scales: {
+                                x: {
+                                    type: 'linear',
+                                    position: 'bottom',
+                                    min: -10,
+                                    max: 10
+                                },
+                                y: {
+                                    min: -10,
+                                    max: 10
+                                }
                             }
                         },
                         plugins: {
