@@ -130,9 +130,6 @@ def handle_my_custom_event(json_data):
     print('received json:', json_data)
     latest_packet = json_data  # Update the latest packet
     emit('update_packet', latest_packet, broadcast=True)
-    emit('sensor_message', {'data': 'Message from server'})
-    
-
     if 'trackData' in json_data:
         data_to_add = [(entry[0], entry[1], entry[2]) for entry in json_data['trackData']]
         now = datetime.datetime.now(pytz.timezone('US/Eastern'))
@@ -141,7 +138,11 @@ def handle_my_custom_event(json_data):
 
         save_trackdata(sql_username, sql_password, sql_host, sql_database, data_to_add, formatted_date, 1, 1, formatted_time)
 
-        
+@socketio.on('send_command')
+def handle_send_command(command):
+    # Emit a command event to the client
+    emit('command', {'command': command})
+
 
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=5001, debug=True)
