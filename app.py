@@ -130,6 +130,8 @@ def handle_my_custom_event(json_data):
     print('received json:', json_data)
     latest_packet = json_data  # Update the latest packet
     emit('update_packet', latest_packet, broadcast=True)
+    emit('sensor_message', {'data': 'Message from server'})
+    
 
     if 'trackData' in json_data:
         data_to_add = [(entry[0], entry[1], entry[2]) for entry in json_data['trackData']]
