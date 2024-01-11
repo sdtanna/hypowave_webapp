@@ -113,14 +113,17 @@ def home():
         
         if request.form['action'] == 'startSensor':
             socketio.emit('command', {'data':'startSensor'})
-            #handle_send_command('startSensor')
+
         if request.form['action'] == 'stopSensor':
             socketio.emit('command', {'data':'stopSensor'})
-            ##handle_send_command('stopSensor')
+
+        if request.form['action'] == 'resetSensor':
+            socketio.emit('command', {'data':'resetSensor'})
+
         if request.form['action'] == 'sendCmd':
             cmd_to_send = request.form.get("cmdinput")
             socketio.emit('command', {'data':cmd_to_send})
-            ##handle_send_command(cmd_to_send)
+
 
         else:
             return ('', 204)
