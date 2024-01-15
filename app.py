@@ -94,7 +94,7 @@ def save_trackdata(username, password, host, database, data, date, sensor, room,
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with your secret key
-socketio = SocketIO(app)
+socketio = SocketIO(app, ping_timeout=10, ping_interval=5)
 
 latest_packet = None
 
@@ -160,6 +160,10 @@ def handle_my_custom_event(json_data):
 def handle_send_command(command):
     # Emit a command event to the client
     emit('command', {'command': command})
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    print(f'Client disconnected: {request.sid}')
 
 
 if __name__ == '__main__':
