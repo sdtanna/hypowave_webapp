@@ -4,56 +4,40 @@ import json
 import psycopg2
 import pandas as pd
 import pytz
+import os
 
 import datetime #ADD THIS TO REQS.TXT
 
+DATABASE_URL = os.environ['DATABASE_URL']
+LOCAL = False
+
 # Connecting to DB
-def connect_sql(username, password, host, database):
-    conn = psycopg2.connect(host=host, database=database, user=username, password=password)
-    return conn
+def connect_sql():
+    if LOCAL:
+        cardentials = get_credentials('super_secert_passwords.txt')
+        sql_host = cardentials['host']
+        sql_username = cardentials['username']
+        sql_password = cardentials['password']
+        sql_database = cardentials['database']
 
-sql_host="ec2-44-206-18-218.compute-1.amazonaws.com"
-sql_username="qoxrlnvnhoqxrj"
-sql_password="3b0361f995fa7559058fdaba03058de268ee13a7cda5b27bbe17ddc4c8a4c5ff"
-sql_database="d5js1h474dsr6k"
+        conn=psycopg2.connect(host=sql_host, database=sql_database, user=sql_username, password=sql_password)
+        return conn
+    else:
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+        return conn
 
-#conn = psycopg2.connect(host=sql_host, database=sql_database, user=sql_username, password=sql_password)
-#curs = conn.cursor()
 
-# Print data in user_data 
+def get_credentials(filename):
+    credentials = {}
+    with open(filename, 'r') as f:
+        for line in f:
+            key, value = line.strip().split('=')
+            credentials[key] = value
+    return credentials
 
-#query = """SELECT u_id, u_name, u_pass, u_email FROM user_data;"""
-#curs.execute(query)
-#user_data = curs.fetchall()
-#user_data = pd.DataFrame(user_data, dtype = "string")
-###user_data.columns = ['u_id', 'u_name', 'u_pass', 'u_email']
-#print(user_data.to_string())
 
-#curs.execute("""SELECT column_name FROM information_schema.columns WHERE table_name = 'historical'""")
-#for table in curs.fetchall():
-#    print(table)
-
-#curs.execute("""INSERT INTO user_data(u_name, u_pass, u_email) VALUES (%s, %s, %s);""", ("1", "1", "1"))
-#print("good1")
-
-#curs.execute("""SELECT u_name FROM user_data WHERE u_name=%s""", ("1"))
-#for table in curs.fetchall():
-#    print(table)
-#print("good1")
-
-#conn.commit()
-
-# CLEARS ENTIRE DB
-# conn = psycopg2.connect(host=sql_host, database=sql_database, user=sql_username, password=sql_password)
-# curs = conn.cursor()
-# curs.execute("""DELETE FROM user_data""")
-# curs.execute("""DELETE FROM historical""")
-# conn.commit()
-# conn.close()
-
-# Function adds user when user icon clicked - to be changed
-def add_user(username, password, host, database, data):
-    conn = psycopg2.connect(host=host, database=database, user=username, password=password)
+def add_user(data):
+    conn = connect_sql()
     curs = conn.cursor()
 
     try:
@@ -74,8 +58,8 @@ def add_user(username, password, host, database, data):
                     VALUES (%s, %s, %s);""", (data[0] + '1', data[1] + '1', data[2] + '1'))
         print("good2")
 
-def save_trackdata(username, password, host, database, data, date, sensor, room, time):
-    conn = psycopg2.connect(host=host, database=database, user=username, password=password)
+def save_trackdata(data, date, sensor, room, time):
+    conn = connect_sql()
     curs = conn.cursor()
 
     try:
@@ -108,7 +92,7 @@ def home():
             useremail = 'User1Email'
 
             newUserData = (username, userpass, useremail)
-            add_user(sql_username, sql_password, sql_host, sql_database, newUserData)
+            add_user(newUserData)
             print("fdone")
         
         if request.form['action'] == 'startSensor':
@@ -154,7 +138,7 @@ def handle_my_custom_event(json_data):
         formatted_time = now.strftime('%H:%M:%S')
 
         if frameNum % 10 == 0:
-            save_trackdata(sql_username, sql_password, sql_host, sql_database, data_to_add, formatted_date, 1, 1, formatted_time)
+            save_trackdata(data_to_add, formatted_date, 1, 1, formatted_time)
 
 @socketio.on('send_command')
 def handle_send_command(command):
