@@ -9,16 +9,27 @@ import os
 import datetime #ADD THIS TO REQS.TXT
 
 DATABASE_URL = os.environ['DATABASE_URL']
+SECRET_KEY = os.environ['SECRET_KEY']
+
 LOCAL = False
+
+
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = SECRET_KEY
+socketio = SocketIO(app, ping_timeout=10, ping_interval=5)
+
+
 
 # Connecting to DB
 def connect_sql():
+    
     if LOCAL:
-        cardentials = get_credentials('super_secert_passwords.txt')
-        sql_host = cardentials['host']
-        sql_username = cardentials['username']
-        sql_password = cardentials['password']
-        sql_database = cardentials['database']
+        credentials = get_credentials('super_secert_passwords.txt')
+        sql_host = credentials['host']
+        sql_username = credentials['username']
+        sql_password = credentials['password']
+        sql_database = credentials['database']
 
         conn=psycopg2.connect(host=sql_host, database=sql_database, user=sql_username, password=sql_password)
         return conn
@@ -76,9 +87,7 @@ def save_trackdata(data, date, sensor, room, time):
         curs.close()  # Close the cursor
         conn.close()  # Close the connection
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with your secret key
-socketio = SocketIO(app, ping_timeout=10, ping_interval=5)
+
 
 latest_packet = None
 
@@ -107,7 +116,6 @@ def home():
         if request.form['action'] == 'sendCmd':
             cmd_to_send = request.form.get("cmdinput")
             socketio.emit('command', {'data':cmd_to_send})
-
 
         else:
             return ('', 204)
@@ -153,4 +161,3 @@ def handle_disconnect():
 
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=5001, debug=True)
-    save_trackdata("test", "test", "test", "test", "test")
