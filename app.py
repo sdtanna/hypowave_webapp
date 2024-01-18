@@ -8,12 +8,14 @@ import os
 
 import datetime #ADD THIS TO REQS.TXT
 
-DATABASE_URL = os.environ['DATABASE_URL']
-SECRET_KEY = os.environ['SECRET_KEY']
 
 LOCAL = False
 
-
+if LOCAL == False:
+    DATABASE_URL = os.environ['DATABASE_URL']
+    SECRET_KEY = os.environ['SECRET_KEY']
+else:
+    SECRET_KEY = ""
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
@@ -25,11 +27,11 @@ socketio = SocketIO(app, ping_timeout=10, ping_interval=5)
 def connect_sql():
     
     if LOCAL:
-        credentials = get_credentials('super_secert_passwords.txt')
-        sql_host = credentials['host']
-        sql_username = credentials['username']
-        sql_password = credentials['password']
-        sql_database = credentials['database']
+        credentials = get_credentials()
+        sql_host = credentials['sql_host']
+        sql_username = credentials['sql_username']
+        sql_password = credentials['sql_password']
+        sql_database = credentials['sql_database']
 
         conn=psycopg2.connect(host=sql_host, database=sql_database, user=sql_username, password=sql_password)
         return conn
@@ -38,9 +40,11 @@ def connect_sql():
         return conn
 
 
-def get_credentials(filename):
+
+
+def get_credentials():
     credentials = {}
-    with open(filename, 'r') as f:
+    with open('super_secret_passwords.txt', 'r') as f:
         for line in f:
             key, value = line.strip().split('=')
             credentials[key] = value
@@ -179,5 +183,14 @@ def handle_disconnect():
     print(f'Client disconnected: {request.sid}')
 
 
+
 if __name__ == '__main__':
+    #test
+    conn = connect_sql()
+    curs = conn.cursor()
+    curs.execute("""INSERT INTO user_data(u_name, u_pass, u_email) VALUES (%s, %s, %s);""", ("3", "3", "3"))
+    print("Worked")
+    conn.commit()
+    curs.close()
+    conn.close()
     socketio.run(app, host='0.0.0.0', port=5001, debug=True)
