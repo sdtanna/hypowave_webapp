@@ -117,6 +117,26 @@ def home():
             cmd_to_send = request.form.get("cmdinput")
             socketio.emit('command', {'data':cmd_to_send})
 
+        if request.form['action'] == 'seldates':
+            startDate = request.form.get("startDate")
+            endDate = request.form.get("endDate")
+
+            conn = conn = connect_sql()
+            curs = conn.cursor()
+
+            query = """SELECT x_pos, y_pos, date FROM historical WHERE date BETWEEN %s AND %s;"""
+            curs.execute(query, (startDate, endDate))
+            selected_data = curs.fetchall()
+            selected_data = pd.DataFrame(selected_data, dtype="string")
+            #selected_data.columns = ['x_pos', 'y_pos', 'date']
+
+            for row in selected_data:
+                print(row)
+            
+            conn.commit()
+            curs.close()
+            conn.close()
+
         else:
             return ('', 204)
     
