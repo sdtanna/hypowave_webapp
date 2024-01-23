@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Heatmap Visualization</title>
+    <script src="https://cdn.jsdelivr.net/npm/heatmap.js@2.0/build/heatmap.min.js"></script>
+</head>
+<body>
+    <div id="heatmap" style="width: 800px; height: 600px;"></div>
+
+    <script>
+        var heatmapInstance = h337.create({
+            container: document.getElementById('heatmap'),
+            radius: 10
+        });
+
+        var dataPoints = {{ data | safe }};
+        heatmapInstance.setData({
+            max: 5,
+            data: dataPoints
+        });
+    </script>
+</body>
+</html>

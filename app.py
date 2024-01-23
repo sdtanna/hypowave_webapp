@@ -10,8 +10,11 @@ import datetime #ADD THIS TO REQS.TXT
 import heatmap1
 import traceback
 
+import math
+from collections import Counter
 
-LOCAL = False
+
+LOCAL = True
 
 if LOCAL == False:
     DATABASE_URL = os.environ['DATABASE_URL']
@@ -128,75 +131,49 @@ def home():
 
         if request.form['action'] == 'seldates':
 
-            # #test
-            # conn = connect_sql()
-            # curs = conn.cursor()
-            # curs.execute("""INSERT INTO user_data(u_name, u_pass, u_email) VALUES (%s, %s, %s);""", ("3", "3", "3"))
-            # print("Worked")
-            # conn.commit()
-            # curs.close()
-            # conn.close()
-
-            # startDate = request.form.get("startDate")
-            # endDate = request.form.get("endDate")
-
-            # conn = connect_sql()
-            # curs = conn.cursor()
-
-            # query = """SELECT x_pos, y_pos, date FROM historical WHERE date BETWEEN %s AND %s;"""
-            # curs.execute(query, (startDate, endDate))
-            # selected_data = curs.fetchall()
-            # selected_data = pd.DataFrame(selected_data, dtype="string")
-            # selected_data.columns = ['x_pos', 'y_pos', 'date']
-
-            # for index, row in selected_data.iterrows():
-            #     print(row['x_pos'], row['y_pos'], row['date'])
-            
-            # conn.commit()
-            # curs.close()
-            # conn.close()
+        
 
             startDate = request.form.get("startDate")
             endDate = request.form.get("endDate")
             
-            # try:
-            #     startDate_obj = datetime.datetime.strptime(startDate, '%Y-%m-%d')
-            #     endDate_obj = datetime.datetime.strptime(endDate, '%Y-%m-%d')
-            # except AttributeError as a:
-            #     print("An error occurred:", a)
-
 
             try:
                 conn = connect_sql()
                 curs = conn.cursor()
                 
-                query = "SELECT x_pos, y_pos, date FROM historical WHERE date BETWEEN %s and %s;"
-                curs.execute(query, (startDate, endDate))
-                rows = curs.fetchall()
 
                 query_nodates = "SELECT x_pos, y_pos FROM historical WHERE date BETWEEN %s and %s;"
                 curs.execute(query_nodates, (startDate, endDate))
                 rows_nodates = curs.fetchall()
 
-                #rows_nodates_floats = [(float(x), float(y)) for x, y in rows_nodates]
-
-                # count = 0
-                # for row in rows_nodates_floats:
-                #         print(row)
-                #         count = count+1
-                # print(count)
-                
-
-                # selected_data = pd.DataFrame(rows)
-                # selected_data.columns = ['x_pos', 'y_pos', 'date']
-
-                heatmap_png = heatmap1.generate_heatmap(rows_nodates)
-
-                # for index, row in selected_data.iterrows():
-                #     print(row['x_pos'], row['y_pos'], row['date'])
-
                 curs.close()
                 conn.close()
+
+                grid_size = 10
+
+                # Function to adjust coordinates to the nearest grid
+                def adjust_to_grid(x, y, size):
+                    return (math.floor(x / size) * size, math.floor(y / size) * size)
+
+                def transform_coordinates(x, y, width, height):
+                    # Translate coordinates: shift x by +3 to make all values positive
+                    x_translated = x + 3
+
+                    # Scale coordinates: assuming original x ranges from 0 to 6 (after translation), and y from 0 to 6
+                    scale_x = width / 6
+                    scale_y = height / 6
+                    return (x_translated * scale_x, y * scale_y)
+                
+
+                frequency = Counter(transform_coordinates(x, y, 800, 600) for x, y in rows_nodates)
+
+                # Adjust coordinates and count frequency
+                # frequency = Counter(adjust_to_grid(x, y, grid_size) for x, y in rows_nodates)
+
+                # Convert the frequency data into the format required by heatmap.js
+                heatmap_data = [{'x': x, 'y': y, 'value': freq} for (x, y), freq in frequency.items()]
+
+                return render_template('heatmap.html', data=heatmap_data)
             
             except Exception as e:
                 print("An error occurred:", e)
