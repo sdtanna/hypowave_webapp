@@ -12,5 +12,4 @@ datetime
 pytz
 numpy
 matplotlib
-PIL
-mpl_toolkits
+pillow
