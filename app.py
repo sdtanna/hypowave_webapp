@@ -7,6 +7,8 @@ import pytz
 import os
 
 import datetime #ADD THIS TO REQS.TXT
+import heatmap1
+import traceback
 
 
 LOCAL = False
@@ -116,6 +118,9 @@ def home():
 
         if request.form['action'] == 'resetSensor':
             socketio.emit('command', {'data':'resetSensor'})
+        
+        if request.form['action'] == 'sendCfg':
+            socketio.emit('command', {'data':'cfg'})
 
         if request.form['action'] == 'sendCmd':
             cmd_to_send = request.form.get("cmdinput")
@@ -123,33 +128,80 @@ def home():
 
         if request.form['action'] == 'seldates':
 
-            #test
-            conn = connect_sql()
-            curs = conn.cursor()
-            curs.execute("""INSERT INTO user_data(u_name, u_pass, u_email) VALUES (%s, %s, %s);""", ("3", "3", "3"))
-            print("Worked")
-            conn.commit()
-            curs.close()
-            conn.close()
+            # #test
+            # conn = connect_sql()
+            # curs = conn.cursor()
+            # curs.execute("""INSERT INTO user_data(u_name, u_pass, u_email) VALUES (%s, %s, %s);""", ("3", "3", "3"))
+            # print("Worked")
+            # conn.commit()
+            # curs.close()
+            # conn.close()
 
             # startDate = request.form.get("startDate")
             # endDate = request.form.get("endDate")
 
-            # conn = conn = connect_sql()
+            # conn = connect_sql()
             # curs = conn.cursor()
 
             # query = """SELECT x_pos, y_pos, date FROM historical WHERE date BETWEEN %s AND %s;"""
             # curs.execute(query, (startDate, endDate))
             # selected_data = curs.fetchall()
             # selected_data = pd.DataFrame(selected_data, dtype="string")
-            # #selected_data.columns = ['x_pos', 'y_pos', 'date']
+            # selected_data.columns = ['x_pos', 'y_pos', 'date']
 
-            # for row in selected_data:
-            #     print(row)
+            # for index, row in selected_data.iterrows():
+            #     print(row['x_pos'], row['y_pos'], row['date'])
             
             # conn.commit()
             # curs.close()
             # conn.close()
+
+            startDate = request.form.get("startDate")
+            endDate = request.form.get("endDate")
+            
+            # try:
+            #     startDate_obj = datetime.datetime.strptime(startDate, '%Y-%m-%d')
+            #     endDate_obj = datetime.datetime.strptime(endDate, '%Y-%m-%d')
+            # except AttributeError as a:
+            #     print("An error occurred:", a)
+
+
+            try:
+                conn = connect_sql()
+                curs = conn.cursor()
+                
+                query = "SELECT x_pos, y_pos, date FROM historical WHERE date BETWEEN %s and %s;"
+                curs.execute(query, (startDate, endDate))
+                rows = curs.fetchall()
+
+                query_nodates = "SELECT x_pos, y_pos FROM historical WHERE date BETWEEN %s and %s;"
+                curs.execute(query_nodates, (startDate, endDate))
+                rows_nodates = curs.fetchall()
+
+                #rows_nodates_floats = [(float(x), float(y)) for x, y in rows_nodates]
+
+                # count = 0
+                # for row in rows_nodates_floats:
+                #         print(row)
+                #         count = count+1
+                # print(count)
+                
+
+                # selected_data = pd.DataFrame(rows)
+                # selected_data.columns = ['x_pos', 'y_pos', 'date']
+
+                heatmap_png = heatmap1.generate_heatmap(rows_nodates)
+
+                # for index, row in selected_data.iterrows():
+                #     print(row['x_pos'], row['y_pos'], row['date'])
+
+                curs.close()
+                conn.close()
+            
+            except Exception as e:
+                print("An error occurred:", e)
+                print(traceback.format_exc())
+
 
         else:
             return ('', 204)
@@ -191,8 +243,6 @@ def handle_send_command(command):
 @socketio.on('disconnect')
 def handle_disconnect():
     print(f'Client disconnected: {request.sid}')
-
-
 
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=5001, debug=True)
