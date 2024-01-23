@@ -20,6 +20,8 @@
 
     <script src="https://kit.fontawesome.com/7edbb96f44.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/heatmap.js@2.0/build/heatmap.min.js"></script>
+
 
 </head>
 <body>
@@ -111,6 +113,21 @@
 
                     // Update the chart to reflect changes
                     chart.update();
+                });
+            </script>
+
+            <div id="heatmap" style="width: 800px; height: 600px;"></div>
+
+            <script>
+                var heatmapInstance = h337.create({
+                    container: document.getElementById('heatmap'),
+                    radius: 10
+                });
+
+                var dataPoints = {{ data | safe }};
+                heatmapInstance.setData({
+                    max: 5,
+                    data: dataPoints
                 });
             </script>
 

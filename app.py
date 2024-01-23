@@ -103,6 +103,9 @@ latest_packet = None
 @app.route("/", methods = ["GET", "POST"])
 
 def home():
+    
+    heatmap_data = []
+
     if request.method == "POST":        
         if request.form['action'] == 'adduser':
             username = 'User1'
@@ -173,7 +176,7 @@ def home():
                 # Convert the frequency data into the format required by heatmap.js
                 heatmap_data = [{'x': x, 'y': y, 'value': freq} for (x, y), freq in frequency.items()]
 
-                return render_template('heatmap.html', data=heatmap_data)
+                #return render_template('index.html', data=heatmap_data)
             
             except Exception as e:
                 print("An error occurred:", e)
@@ -182,8 +185,9 @@ def home():
 
         else:
             return ('', 204)
+            
     
-    return render_template('index.html')
+    return render_template('index.html', data=heatmap_data)
 
 @socketio.on('connect')
 def handle_connect():
