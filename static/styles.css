@@ -208,6 +208,74 @@ h1 {
     cursor: pointer;
 }
 
+.settings_modal_content {
+    background-color: #dedede;
+    margin: 14% auto; /* Dist from the top and centered */
+    padding: 35px;
+    border: none #888;
+    width: 300px; /* Depends on screen size */
+    height: 30%;
+    border-radius: 15px;
+
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+}
+
+.settingBtn {
+    background: #ACD5DB;
+    color: #313131;
+    width: 196px;
+    height: 25px;
+    border-radius: 15px;
+    border: none;
+    font-size: 16px;
+    margin-top: 8px;
+    transition: all 0.2s;
+}
+
+.settingBtn:hover {
+    background: #98d0d8;
+    cursor: pointer;
+}
+
+.custom-search {
+    position: relative;
+    width: 196px;
+    height: 25px;
+}
+
+.custom-search-input {
+    width: 150px;
+    height: 25px;
+    border: none;
+    border-radius: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+    line-height: 1;
+    outline: none;
+    
+    margin-top: 8px;
+    font-size: 16px;
+}
+
+.custom-search-botton {
+    position: absolute;
+    right: 3px; 
+    top: 8px;
+    bottom: 3px;
+    border: 0;
+    background: #ACD5DB;
+    color: #fff;
+    outline: none;
+    margin: 0;
+    padding: 0 10px;
+    border-radius: 15px;
+    z-index: 2;
+
+    font-size: 15px;
+}
+
+
 /*SCROLL BAR*/
 ::-webkit-scrollbar {
     width: 15px;

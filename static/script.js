@@ -23,8 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     // Adjusting headers on RHS
-    document.getElementById("liveBtn").addEventListener('click', () => {
-        document.getElementById("plot_header").textContent = "Live Occupancy"
+    document.getElementById("currentBtn").addEventListener('click', () => {
+        document.getElementById("plot_header").textContent = "Current Occupancy"
         document.getElementById("dataPlot").style.display = "block"
     });
   
@@ -86,6 +86,23 @@ function viewdatesmodal() {
             modal.style.display = "none";
             document.getElementById("startDate").value='0000-00-00';
             document.getElementById("endDate").value='0000-00-00';
+        }
+    }
+};
+
+function viewsettingsmodal() {
+    var modal = document.getElementById("settings_modal");
+    var close = document.getElementById("close_settings_btn");
+  
+    modal.style.display = "block";
+  
+    close.onclick = function() {
+        modal.style.display = "none";
+    }
+  
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
         }
     }
 };

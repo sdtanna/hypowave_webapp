@@ -29,7 +29,7 @@
     <div class="header unselectable">
         <a>Hypowave</a>
         <button form="form" value="adduser" name="action" class="header_btn fa-solid fa-circle-user fa-2xl" style="color: #ACD5DB; margin-top: 15px;"></button>
-        <button class="header_btn fa-solid fa-gear fa-2xl" style="color: #ACD5DB; margin-top: 15px;"></button>
+        <button class="header_btn fa-solid fa-gear fa-2xl" style="color: #ACD5DB; margin-top: 15px;" onclick = "viewsettingsmodal()"></button>
         <button class="header_btn">Feedback</button>
         <button class="header_btn">About</button>
         <button id = "help_btn" class = "header_btn" onclick = "viewhelpmodal()">Help</button>
@@ -42,15 +42,10 @@
             <p>Current Visitor Total: <span id="visitorTotal"></span></p>
             <p>Stat 2: <span id="stat2"></span></p>
             <p>Stat 3: <span id="stat3"></span></p>
-            <button id="startBtn" form="form" value="startSensor" name="action">Start Sensor</button>
-            <button id="stopBtn" form="form" value="stopSensor" name="action">Stop Sensor</button>
-            <button id="resetBtn" form="form" value="resetSensor" name="action">Reset Sensor</button>
-            <input id = "cmdinput" form="form" type = "text" name = "cmdinput" placeholder = "Enter Command...">
-                <button id="submitCmdBtn" form="form" value="sendCmd" name="action" style="float: right;">Submit</button>
-            </input>
+            
         
             <div class="controls">
-                <button id="liveBtn" class="modeBtn" style="margin-top:2px;">Live</button>
+                <button id="currentBtn" class="modeBtn" style="margin-top:2px;">Current Occupancy</button>
                 <button id="todayBtn" class="modeBtn" >Today</button>
                 <button id="pastWeekBtn" class="modeBtn" >Past Week</button>
                 <button id="selectDateBtn" class="modeBtn" onclick = "viewdatesmodal()">Select Date(s)</button>
@@ -59,7 +54,7 @@
         </div>
     
         <div class="occupancy_area">
-            <h1 id="plot_header">Live Occupancy</h1>
+            <h1 id="plot_header">Current Occupancy</h1>
             <div id="plot"></div>
 
             <canvas id="dataPlot"></canvas>
@@ -136,9 +131,27 @@
                     <input form="form" type="date" id="startDate" name="startDate" value="" class="dateselect">
                     <br>
                     <d>End Date:</d>
-                    <input type="date" id="endDate" class="dateselect">
+                    <input form="form" type="date" id="endDate" name="endDate" value="" class="dateselect">
                     <br>
                     <button id="submitDates" form="form" type="submit" value="seldates" name="action" class="submitDates">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="settings_modal" class="modal unselectable">
+        <!-- Modal content -->
+        <div class="settings_modal_content">
+            <button id = "close_settings_btn" class = "close_modal_btn">&#10005;</button>
+            <div>
+                <a>Settings</a>
+                <button id="startBtn" form="form" value="startSensor" name="action" class="settingBtn">Start Sensor</button>
+                <button id="stopBtn" form="form" value="stopSensor" name="action" class="settingBtn">Stop Sensor</button>
+                <button id="resetBtn" form="form" value="resetSensor" name="action" class="settingBtn">Reset Sensor</button>
+                <button id="cfgBtn" form="form" value="sendCfg" name="action" class="settingBtn">Send Configuration</button>
+                <div class="custom-search">
+                    <input id = "cmdinput" form="form" type = "text" name = "cmdinput" placeholder = "Enter Command..." class="custom-search-input">
+                    <button id="submitCmdBtn" form="form" value="sendCmd" name="action" class="custom-search-botton fa-solid fa-arrow-right"></button>
                 </div>
             </div>
         </div>
