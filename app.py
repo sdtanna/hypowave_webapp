@@ -14,7 +14,7 @@ import math
 from collections import Counter
 
 
-LOCAL = True
+LOCAL = False
 
 if LOCAL == False:
     DATABASE_URL = os.environ['DATABASE_URL']
