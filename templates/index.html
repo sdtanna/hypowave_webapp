@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SocketIO Server</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='hypowave_logo.ico') }}">
+    <title>Hypowave</title>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {
@@ -20,14 +21,20 @@
 
     <script src="https://kit.fontawesome.com/7edbb96f44.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/heatmap.js@2.0/build/heatmap.min.js"></script>
+
 
 </head>
 <body>
 
     <form id="form" action="{{ url_for('home')}}" method="post"></form>
 
+    <div class="unselectable upperLayer">
+        <img src="{{url_for('static', filename='hypowave_logo.ico')}}">
+    </div>
+
     <div class="header unselectable">
-        <a>Hypowave</a>
+        <a style="margin-left: 40px;">Hypowave</a>
         <button form="form" value="adduser" name="action" class="header_btn fa-solid fa-circle-user fa-2xl" style="color: #ACD5DB; margin-top: 15px;"></button>
         <button class="header_btn fa-solid fa-gear fa-2xl" style="color: #ACD5DB; margin-top: 15px;" onclick = "viewsettingsmodal()"></button>
         <button class="header_btn">Feedback</button>
@@ -40,9 +47,8 @@
         <div class="overview unselectable">
             <h1>Overview</h1>
             <p>Current Visitor Total: <span id="visitorTotal"></span></p>
-            <p>Stat 2: <span id="stat2"></span></p>
-            <p>Stat 3: <span id="stat3"></span></p>
-            
+            <p>Total in Section A: <span id="stat2"></span></p>
+            <p>Total in Section B: <span id="stat3"></span></p>
         
             <div class="controls">
                 <button id="currentBtn" class="modeBtn" style="margin-top:2px;">Current Occupancy</button>
@@ -54,10 +60,9 @@
         </div>
     
         <div class="occupancy_area">
-            <h1 id="plot_header">Current Occupancy</h1>
-            <div id="plot"></div>
+            <h1 id="plot_header" class="unselectable">Current Occupancy</h1>
 
-            <canvas id="dataPlot"></canvas>
+            <div id="plotDiv" class="hidden"><canvas id="dataPlot"></canvas></div>
             <script type="text/javascript">
                 var socket = io();
                 var ctx = document.getElementById('dataPlot').getContext('2d');
@@ -103,19 +108,32 @@
                         chart.data.datasets[0].data.push({ x: 0, y: 0 });
                         data.trackData.forEach(entry => {
                             chart.data.datasets[0].data.push({
-                                x: entry[1], // Assuming this is the X coordinate
-                                y: entry[2]  // Assuming this is the Y coordinate
+                                x: entry[1], // X coordinate
+                                y: entry[2]  // Y coordinate
                             });
                         });
                     }
 
-                    // Update the chart to reflect changes
+                    // Update chart to reflect changes
                     chart.update();
                 });
             </script>
 
-            <!-- <h1>Latest Packet Received</h1>
-            <pre id="packet">Waiting for data...</pre> -->
+            <div id="heatmap" class="hidden" style="width: 800px; height: 410px;"></div>
+
+            <script>
+                var heatmapInstance = h337.create({
+                    container: document.getElementById('heatmap'),
+                    radius: 5,
+                });
+
+                var dataPoints = {{ data | safe }};
+                heatmapInstance.setData({
+                    max: 5,
+                    data: dataPoints
+                });
+            </script>
+
         </div>
      
     </div>
